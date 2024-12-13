@@ -23,8 +23,10 @@ def convert_to_grayscale(img):
 
 # 4. Draw Rectangle
 def draw_rectangle(img, start_point, end_point, color, thickness):
+    # Draw the rectangle on the image
     img_with_rectangle = cv2.rectangle(img, start_point, end_point, color, thickness)
     return img_with_rectangle
+
 
 # 5. Resize Image
 def resize_image(img, scale_percent):
@@ -53,13 +55,14 @@ if __name__ == "__main__":
     gray_image = convert_to_grayscale(image)
     cv2.imwrite("output_files/gray_image.png", gray_image)
     print("Grayscale image saved.")
+    
+    # 5 Resize Image
+    resized_image = resize_image(image, 20)
+    cv2.imwrite("output_files/resized_image.png", resized_image)
+    print("Resized image saved.")
 
     # 4 Draw Rectangle
-    rectangle_image = draw_rectangle(image, (50, 50), (200, 200), (0, 0, 255), 2)
+    rectangle_image = draw_rectangle(image, (50, 50), (100, 100), (0, 0, 255), 2)
     cv2.imwrite("output_files/rectangle.png", rectangle_image)
     print("Rectangle image saved.")
 
-    # 5 Resize Image
-    resized_image = resize_image(image, 70)
-    cv2.imwrite("output_files/resized_image.png", resized_image)
-    print("Resized image saved.")
