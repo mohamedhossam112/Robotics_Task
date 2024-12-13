@@ -1,0 +1,71 @@
+name: Autograding Tests
+on:
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: test_blur_image
+        id: test_blur_image
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test_blur_image
+          setup-command: pip install --upgrade pytest opencv-contrib-python
+          command: pytest -k test_blur_image ./test.py
+          timeout: 1
+          max-score: 2
+      - name: test_canny_dilate_erode
+        id: test_canny_dilate_erode
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test_canny_dilate_erode
+          setup-command: pip install --upgrade pytest opencv-contrib-python
+          command: pytest -k test_canny_dilate_erode ./test.py
+          timeout: 1
+          max-score: 3
+      - name: test_convert_to_grayscale
+        id: test_convert_to_grayscale
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test_convert_to_grayscale
+          setup-command: pip install --upgrade pytest opencv-contrib-python
+          command: pytest -k test_convert_to_grayscale ./test.py
+          timeout: 1
+          max-score: 2
+      - name: test_draw_rectangle
+        id: test_draw_rectangle
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test_draw_rectangle
+          setup-command: pip install --upgrade pytest opencv-contrib-python
+          command: pytest -k test_draw_rectangle ./test.py
+          timeout: 1
+          max-score: 1
+      - name: test_resize_image
+        id: test_resize_image
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test_resize_image
+          setup-command: pip install --upgrade pytest opencv-contrib-python
+          command: pytest -k test_resize_image ./test.py
+          timeout: 1
+          max-score: 2
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST_BLUR_IMAGE_RESULTS: "${{steps.test_blur_image.outputs.result}}"
+          TEST_CANNY_DILATE_ERODE_RESULTS: "${{steps.test_canny_dilate_erode.outputs.result}}"
+          TEST_CONVERT_TO_GRAYSCALE_RESULTS: "${{steps.test_convert_to_grayscale.outputs.result}}"
+          TEST_DRAW_RECTANGLE_RESULTS: "${{steps.test_draw_rectangle.outputs.result}}"
+          TEST_RESIZE_IMAGE_RESULTS: "${{steps.test_resize_image.outputs.result}}"
+        with:
+          runners: test_blur_image,test_canny_dilate_erode,test_convert_to_grayscale,test_draw_rectangle,test_resize_image
